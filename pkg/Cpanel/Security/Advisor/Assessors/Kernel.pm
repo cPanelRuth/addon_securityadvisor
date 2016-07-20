@@ -1,6 +1,6 @@
 package Cpanel::Security::Advisor::Assessors::Kernel;
 
-# Copyright (c) 2014, cPanel, Inc.
+# Copyright (c) 2016, cPanel, Inc.
 # All rights reserved.
 # http://cpanel.net
 #
@@ -35,12 +35,28 @@ use Cpanel::OSSys::Env      ();
 my $kc_kernelversion = kcare_kernel_version("uname");
 
 sub version {
-    return '1.02';
+    return '1.03';
 }
 
 sub generate_advice {
     my ($self) = @_;
+    $self->_suggest_kernelcare;
     $self->_check_for_kernel_version;
+
+    return 1;
+}
+
+sub _suggest_kernelcare {
+    my ($self) = @_;
+
+    my $environment = Cpanel::OSSys::Env::get_envtype();
+
+    if ( not -e q{/usr/bin/kcarectl} and not( $environment eq 'virtuozzo' || $environment eq 'lxc' ) ) {
+        $self->add_info_advice(
+            'text' => ['Upgrade to KernelCare'],
+            'suggestion' => [ 'KernelCare provides an easy, effortless way of keeping your operating system kernel up to date without needing to reboot your server.. "[output,url,_1,Upgrade to KernelCare,_2,_3]".', 'https://go.cpanel.net/KernelCare', 'target', '_blank', ],
+        );
+    }
 
     return 1;
 }

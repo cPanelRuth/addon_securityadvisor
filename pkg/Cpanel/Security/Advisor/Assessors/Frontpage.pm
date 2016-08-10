@@ -46,6 +46,7 @@ sub _is_frontpage_installed {
     if ( -e '/usr/local/frontpage/version5.0/bin/owsadm.exe' ) {
         $security_advisor_obj->add_advice(
             {
+                'key'        => 'frontpage_is_installed',
                 'type'       => $Cpanel::Security::Advisor::ADVISE_BAD,
                 'text'       => ['Frontpage is installed'],
                 'suggestion' => [
@@ -68,6 +69,7 @@ sub _is_frontpage_in_easyapache {
     if ( -e '/usr/local/apache/modules/mod_frontpage.so' || -e '/usr/local/apache/modules/mod_auth_passthrough.so' ) {
         $security_advisor_obj->add_advice(
             {
+                'key'        => 'easyapache_includes_frontpage_module',
                 'type'       => $Cpanel::Security::Advisor::ADVISE_BAD,
                 'text'       => ['EasyApache includes Microsoft® Frontpage modules'],
                 'suggestion' => [

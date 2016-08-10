@@ -50,11 +50,10 @@ sub _is_iptables_active {
         if ( $status_check =~ m/not running/i ) {
             $security_advisor_obj->add_advice(
                 {
+                    'key'        => 'firewall_not_running',
                     'type'       => $Cpanel::Security::Advisor::ADVISE_BAD,
                     'text'       => ['Firewall is not running'],
-                    'suggestion' => [
-                        'This might be a simple matter of executing "/etc/init.d/iptables start"'
-                    ],
+                    'suggestion' => ['This might be a simple matter of executing "/etc/init.d/iptables start"'],
                 },
             );
         }

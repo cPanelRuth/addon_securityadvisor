@@ -63,6 +63,7 @@ sub _check_for_apache_chroot {
     if ( $security_advisor_obj->{'cpconf'}->{'jailapache'} ) {
         $security_advisor_obj->add_advice(
             {
+                'key'  => 'jailed_apache_is_enabled',
                 'type' => $Cpanel::Security::Advisor::ADVISE_GOOD,
                 'text' => ['Jailed Apache is enabled'],
             }
@@ -71,6 +72,7 @@ sub _check_for_apache_chroot {
     elsif ( -x '/usr/bin/cagefsctl' || -x '/usr/sbin/cagefsctl' ) {
         $security_advisor_obj->add_advice(
             {
+                'key'  => 'cagefs_is_enabled',
                 'type' => $Cpanel::Security::Advisor::ADVISE_GOOD,
                 'text' => ['CageFS is enabled'],
             }
@@ -80,6 +82,7 @@ sub _check_for_apache_chroot {
 
         $security_advisor_obj->add_advice(
             {
+                'key'        => 'vhosts_not_segmented',
                 'type'       => $Cpanel::Security::Advisor::ADVISE_BAD,
                 'text'       => ['Apache vhosts are not segmented or chroot()ed.'],
                 'suggestion' => [
@@ -141,6 +144,7 @@ sub _check_for_eol_apache {
     if ( $apache_version =~ /^(1\.3|2\.0)/ ) {
         $security_advisor_obj->add_advice(
             {
+                'key'        => 'apache_is_eol',
                 'type'       => $Cpanel::Security::Advisor::ADVISE_BAD,
                 'text'       => ['Your Apache version is EOL (End of Life)'],
                 'suggestion' => [
@@ -191,6 +195,7 @@ sub _centos_symlink_protection {
         if ($jailedapache) {
             $security_advisor_obj->add_advice(
                 {
+                    'key'  => 'apache_symlink_protection_enabled',
                     'type' => $good,
                     'text' => ['Apache Symlink Protection is enabled'],
                 }
@@ -199,6 +204,7 @@ sub _centos_symlink_protection {
         else {
             $security_advisor_obj->add_advice(
                 {
+                    'key'      => 'mod_ruid2_is_loaded',
                     type       => $info,
                     text       => ['Apache Symlink Protection: mod_ruid2 loaded in Apache'],
                     suggestion => [
@@ -214,6 +220,7 @@ sub _centos_symlink_protection {
     if ($bluehost) {
         $security_advisor_obj->add_advice(
             {
+                'key'      => 'bluehost_provided_symlink_protection',
                 type       => $warn,
                 text       => ['Apache Symlink Protection: the Bluehost provided Apache patch is in effect'],
                 suggestion => [
@@ -228,6 +235,7 @@ sub _centos_symlink_protection {
     if ($rack911) {
         $security_advisor_obj->add_advice(
             {
+                'key'      => 'rack911_provided_symlink_protection',
                 type       => $warn,
                 text       => ['Apache Symlink Protection: the Rack911 provided Apache patch is in effect'],
                 suggestion => [
@@ -242,6 +250,7 @@ sub _centos_symlink_protection {
     if ( !($ruid) && !($rack911) && !($bluehost) ) {
         $security_advisor_obj->add_advice(
             {
+                'key'      => 'no_symlink_protection',
                 type       => $bad,
                 text       => ['No symlink protection detected'],
                 suggestion => [
@@ -282,6 +291,7 @@ sub _cloudlinux_symlink_protection {
         if ( $uncaged_user_count > 0 ) {
             $security_advisor_obj->add_advice(
                 {
+                    'key'      => 'symlink_protection_cagefs_disabled',
                     type       => $warn,
                     text       => ['Apache Symlink Protection: Users with CloudLinux CageFS disabled'],
                     suggestion => [
@@ -298,6 +308,7 @@ sub _cloudlinux_symlink_protection {
         elsif ( Cpanel::SafeRun::Simple::saferun( '/etc/init.d/cagefs', 'status' ) !~ /running/ ) {
             $security_advisor_obj->add_advice(
                 {
+                    'key'      => 'symlink_protection_cagefs_installed_but_not_running',
                     type       => $warn,
                     text       => ['Apache Symlink Protection: CloudLinux CageFS is installed but not currently running'],
                     suggestion => [
@@ -312,6 +323,7 @@ sub _cloudlinux_symlink_protection {
         else {
             $security_advisor_obj->add_advice(
                 {
+                    'key'      => 'symlink_protection_cagefs_running',
                     type       => $good,
                     text       => ['Apache Symlink Protection: Cloudlinux CageFS protections are in effect'],
                     suggestion => ['You are running CageFS. This provides filesystem level protections for your users and server.']
@@ -323,6 +335,7 @@ sub _cloudlinux_symlink_protection {
     if ( ($ruid) && ( ( $sysctl_fs_enforce_symlinksifowner !~ /1|2/ ) || ( $sysctl_fs_symlinkown_gid != 99 ) ) ) {
         $security_advisor_obj->add_advice(
             {
+                'key'      => 'symlink_protection_sysctl_problems_2',
                 type       => $bad,
                 text       => ['Apache Symlink Protection: Problems with CloudLinux sysctl settings'],
                 suggestion => [
@@ -337,6 +350,7 @@ sub _cloudlinux_symlink_protection {
     elsif ( !($ruid) && ( ( $sysctl_fs_enforce_symlinksifowner != 1 ) || ( $sysctl_fs_symlinkown_gid != 99 ) ) ) {
         $security_advisor_obj->add_advice(
             {
+                'key'      => 'symlink_protection_sysctl_problems_2',
                 type       => $bad,
                 text       => ['Apache Symlink Protection: Problems with CloudLinux sysctl settings'],
                 suggestion => [
@@ -351,6 +365,7 @@ sub _cloudlinux_symlink_protection {
     else {
         $security_advisor_obj->add_advice(
             {
+                'key'      => 'symlink_protection_in_effect',
                 type       => $good,
                 text       => ['Apache Symlink Protection: CloudLinux protections are in effect.'],
                 suggestion => [
@@ -381,6 +396,7 @@ sub _grsecurity_symlink_protection {
     if ( ( $sysctl_kernel_grsecurity_symlinkown_gid =~ /unknown/ ) && ( $sysctl_kernel_grsecurity_enforce_symlinksifowner =~ /unknown/ ) ) {
         $security_advisor_obj->add_advice(
             {
+                'key'      => 'grsecurity_does_not_have_sysctl_enabeled',
                 type       => $warn,
                 text       => ['Apache Symlink Protection: Grsecruity does not have the sysctl option enabled'],
                 suggestion => [
@@ -396,6 +412,7 @@ sub _grsecurity_symlink_protection {
         || ( $sysctl_kernel_grsecurity_enforce_symlinksifowner != 1 ) ) {
         $security_advisor_obj->add_advice(
             {
+                'key'      => 'grsecurity_sysctl_values',
                 type       => $bad,
                 text       => ['Apache Symlink Protection: Grsecurity sysctl values'],
                 suggestion => [
@@ -410,6 +427,7 @@ sub _grsecurity_symlink_protection {
     else {
         $security_advisor_obj->add_advice(
             {
+                'key'      => 'grsecurity_protection_enabled',
                 type       => $good,
                 text       => ['Apache Symlink Protection: You are well protected by grsecurity'],
                 suggestion => ["You appear to have sufficient protections from Apache Symlink Attacks"],

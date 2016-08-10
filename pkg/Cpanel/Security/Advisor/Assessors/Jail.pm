@@ -48,6 +48,7 @@ sub _check_for_unjailed_users {
         if ( -e '/var/cpanel/conf/jail/flags/mount_usr_bin_suid' ) {
             $security_advisor_obj->add_advice(
                 {
+                    'key'        => 'jailshell_mounted_user_bin_suid',
                     'type'       => $Cpanel::Security::Advisor::ADVISE_BAD,
                     'text'       => ['Jailshell is mounting /usr/bin suid, which allows escaping the jail via crontab.'],
                     'suggestion' => [
@@ -79,7 +80,7 @@ sub _check_for_unjailed_users {
             }
         }
 
-        @users_without_jail = sort @users_without_jail; # Always notify in the same order
+        @users_without_jail = sort @users_without_jail;    # Always notify in the same order
         if ( scalar @users_without_jail > 100 ) {
             splice( @users_without_jail, 100 );
             push @users_without_jail, '..truncated..';
@@ -88,6 +89,7 @@ sub _check_for_unjailed_users {
         if (@wheel_users) {
             $security_advisor_obj->add_advice(
                 {
+                    'key'        => 'wheel_users_exist',
                     'type'       => $Cpanel::Security::Advisor::ADVISE_INFO,
                     'text'       => [ 'Users with wheel group access: [list_and,_1].', \@wheel_users ],
                     'suggestion' => [
@@ -103,6 +105,7 @@ sub _check_for_unjailed_users {
         if (@users_without_jail) {
             $security_advisor_obj->add_advice(
                 {
+                    'key'        => 'users_running_outside_of_jail',
                     'type'       => $Cpanel::Security::Advisor::ADVISE_WARN,
                     'text'       => [ 'Users running outside of the jail: [list_and,_1].', \@users_without_jail ],
                     'suggestion' => [

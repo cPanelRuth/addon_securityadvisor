@@ -44,6 +44,7 @@ sub _check_for_low_pwstrength {
     if ( !$security_advisor_obj->{'cpconf'}->{'minpwstrength'} || $security_advisor_obj->{'cpconf'}->{'minpwstrength'} < 25 ) {
         $security_advisor_obj->add_advice(
             {
+                'key'        => 'weak_passwords_permitted',
                 'type'       => $Cpanel::Security::Advisor::ADVISE_BAD,
                 'text'       => ['Trivially weak passwords are permitted.'],
                 'suggestion' => [
@@ -59,6 +60,7 @@ sub _check_for_low_pwstrength {
     elsif ( $security_advisor_obj->{'cpconf'}->{'minpwstrength'} < 50 ) {
         $security_advisor_obj->add_advice(
             {
+                'key'        => 'password_strength_requirements_are_low',
                 'type'       => $Cpanel::Security::Advisor::ADVISE_WARN,
                 'text'       => ['Password strength requirements are low.'],
                 'suggestion' => [
@@ -74,6 +76,7 @@ sub _check_for_low_pwstrength {
     elsif ( $security_advisor_obj->{'cpconf'}->{'minpwstrength'} < 65 ) {
         $security_advisor_obj->add_advice(
             {
+                'key'        => 'password_strength_requirements_are_moderate',
                 'type'       => $Cpanel::Security::Advisor::ADVISE_INFO,
                 'text'       => ['Password strength requirements are moderate.'],
                 'suggestion' => [
@@ -89,6 +92,7 @@ sub _check_for_low_pwstrength {
     else {
         $security_advisor_obj->add_advice(
             {
+                'key'  => 'password_strengths_requirements_are_strong',
                 'type' => $Cpanel::Security::Advisor::ADVISE_GOOD,
                 'text' => ['Password strength requirements are strong.'],
             }

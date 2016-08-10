@@ -46,6 +46,7 @@ sub _check_entropy_chat_enabled {
     if ( Cpanel::RestartSrv::check_service( 'service' => 'entropychat', 'user' => 'nobody' ) ) {
         $security_advisor_obj->add_advice(
             {
+                'key'        => 'entropy_chat_is_running',
                 'type'       => $Cpanel::Security::Advisor::ADVISE_BAD,
                 'text'       => ['Entropy Chat is running.'],
                 'suggestion' => [
@@ -60,6 +61,7 @@ sub _check_entropy_chat_enabled {
     else {
         $security_advisor_obj->add_advice(
             {
+                'key'  => 'entropy_chat_is_disabled',
                 'type' => $Cpanel::Security::Advisor::ADVISE_GOOD,
                 'text' => ['Entropy Chat is disabled.'],
             }

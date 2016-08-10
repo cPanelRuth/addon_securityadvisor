@@ -50,6 +50,7 @@ sub _check_clamav {
     if ( !$self->{clamav}{clamscan}{bin} && !$self->{clamav}{freshclam}{bin} ) {
         $security_advisor_obj->add_advice(
             {
+                'key'        => 'clamav_not_installed',
                 'type'       => $Cpanel::Security::Advisor::ADVISE_BAD,
                 'text'       => ['ClamAV is not installed.'],
                 'suggestion' => [
@@ -62,6 +63,7 @@ sub _check_clamav {
     elsif ( !$self->{clamav}{clamscan}{bin} ) {
         $security_advisor_obj->add_advice(
             {
+                'key'        => 'clamav_binary_not_installed',
                 'type'       => $Cpanel::Security::Advisor::ADVISE_BAD,
                 'text'       => [q{ClamAV clamscan binary is not installed.}],
                 'suggestion' => [
@@ -74,6 +76,7 @@ sub _check_clamav {
     elsif ( !$self->{clamav}{freshclam}{bin} ) {
         $security_advisor_obj->add_advice(
             {
+                'key'        => 'clamav_freshclam_not_installed',
                 'type'       => $Cpanel::Security::Advisor::ADVISE_BAD,
                 'text'       => [q{ClamAV freshclam binary is not installed.}],
                 'suggestion' => [
@@ -88,6 +91,7 @@ sub _check_clamav {
         if ( $self->{clamav}{clamscan}{version} ne $self->{clamav}{freshclam}{version} ) {
             $security_advisor_obj->add_advice(
                 {
+                    'key'        => 'clamav_freshclam_and_clamscan_binaries_different_versions',
                     'type'       => $Cpanel::Security::Advisor::ADVISE_WARN,
                     'text'       => [q{ClamAV freshclam and clamscan binaries are different versions.}],
                     'suggestion' => [

@@ -53,7 +53,8 @@ sub _suggest_kernelcare {
 
     if ( not -e q{/usr/bin/kcarectl} and not( $environment eq 'virtuozzo' || $environment eq 'lxc' ) ) {
         $self->add_info_advice(
-            'text' => ['Upgrade to KernelCare'],
+            'key'        => 'Kernel_kernelcare_purchase',
+            'text'       => ['Upgrade to KernelCare'],
             'suggestion' => [ 'KernelCare provides an easy, effortless way of keeping your operating system kernel up to date without needing to reboot your server.. "[output,url,_1,Upgrade to KernelCare,_2,_3]".', 'https://go.cpanel.net/KernelCare', 'target', '_blank', ],
         );
     }

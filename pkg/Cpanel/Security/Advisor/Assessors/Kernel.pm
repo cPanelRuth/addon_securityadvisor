@@ -50,23 +50,23 @@ sub generate_advice {
 sub _suggest_kernelcare {
     my ($self) = @_;
 
-    my $environment = Cpanel::OSSys::Env::get_envtype();
+    my $environment  = Cpanel::OSSys::Env::get_envtype();
     my $manage2_data = _get_manage2_kernelcare_data();
 
-    if ( not -e q{/usr/bin/kcarectl}
-         and not( $environment eq 'virtuozzo' || $environment eq 'lxc' )
-         and not $manage2_data->{'disabled'} ) {
+    if (    not -e q{/usr/bin/kcarectl}
+        and not( $environment eq 'virtuozzo' || $environment eq 'lxc' )
+        and not $manage2_data->{'disabled'} ) {
 
         my $contact_method = '';
-        my $url_alt_text = 'Upgrade to KernelCare';
-        my $url_to_use = 'https://go.cpanel.net/KernelCare';
+        my $url_alt_text   = 'Upgrade to KernelCare';
+        my $url_to_use     = 'https://go.cpanel.net/KernelCare';
         if ( $manage2_data->{'url'} ne '' ) {
             $url_to_use = $manage2_data->{'url'};
         }
         elsif ( $manage2_data->{'email'} ne '' ) {
-            $url_to_use = 'mailto:' . $manage2_data->{'email'};
+            $url_to_use     = 'mailto:' . $manage2_data->{'email'};
             $contact_method = 'For more information,';
-            $url_alt_text = 'email your provider.';
+            $url_alt_text   = 'email your provider.';
         }
 
         $self->add_info_advice(
@@ -83,8 +83,8 @@ sub _get_manage2_kernelcare_data {
 
     # figure out what manage2 url to use...
     my $manage2 = 'manage2.cpanel.net';
-    if ( -e '/var/cpanel/dev_sandbox') {
-       $manage2 = 'swaaat.manage2.manage.devel.cpanel.net';
+    if ( -e '/var/cpanel/dev_sandbox' ) {
+        $manage2 = 'swaaat.manage2.manage.devel.cpanel.net';
     }
 
     # get our companyid

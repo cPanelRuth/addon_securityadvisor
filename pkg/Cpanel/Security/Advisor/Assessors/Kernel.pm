@@ -63,10 +63,10 @@ sub _suggest_kernelcare {
         if ( $manage2_data->{'url'} ne '' ) {
             $url_to_use = $manage2_data->{'url'};
         }
-        if ( $manage2_data->{'email'} ne '' ) {
+        elsif ( $manage2_data->{'email'} ne '' ) {
             $url_to_use = 'mailto:' . $manage2_data->{'email'};
             $contact_method = 'For more information,';
-            $url_alt_text = 'email your cPanel partner.';
+            $url_alt_text = 'email your provider.';
         }
 
         $self->add_info_advice(

@@ -92,10 +92,11 @@ sub _get_manage2_kernelcare_data {
     my $cid         = q{};
     if ( open my $fh, "<", $companyfile ) {
         $cid = <$fh>;
+        chomp $cid;
         close $fh;
     }
 
-    my $url = sprintf( 'https://%s/kernelcare.cgi?companyid=%s', $manage2, $cid );
+    my $url = sprintf( 'https://%s/kernelcare.cgi?companyid=%d', $manage2, $cid );
     my $raw_resp = HTTP::Tiny->new( 'timeout' => 10 )->get($url);
     my $json_resp;
 

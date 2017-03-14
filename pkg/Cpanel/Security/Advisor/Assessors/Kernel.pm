@@ -102,9 +102,10 @@ sub _suggest_kernelcare {
                 $url_alt_text   = 'email your provider';
             }
             $self->add_warn_advice(
-                'key'        => 'Kernel_kernelcare_purchase',
-                'text'       => $self->_lh->maketext('Upgrade to KernelCare.'),
-                'suggestion' => $self->_lh->maketext( 'KernelCare provides an easy and effortless way to ensure that your operating system uses the most up-to-date kernel without the need to reboot your server. [_1] [output,url,_2,_3,_4,_5].', $contact_method, $url_to_use, $url_alt_text, 'target', $target, ),
+                'key'          => 'Kernel_kernelcare_purchase',
+                'block_notify' => 1,
+                'text'         => $self->_lh->maketext('Upgrade to KernelCare.'),
+                'suggestion'   => $self->_lh->maketext( 'KernelCare provides an easy and effortless way to ensure that your operating system uses the most up-to-date kernel without the need to reboot your server. [_1] [output,url,_2,_3,_4,_5].', $contact_method, $url_to_use, $url_alt_text, 'target', $target, ),
             );
 
         }

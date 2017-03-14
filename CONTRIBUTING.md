@@ -64,3 +64,26 @@ Here are some additional examples of helpful keys that are currently in use:
 * `Kernel_kernelcare_update_available`
 
 Once a pull request is merged into master, the static keys should never change. The keys are used to track message history, and changing them will result in the same issue that they are meant to solve; i.e., duplicate notifications for previously reported alerts.
+
+### Preventing notification of some advice
+
+It may be desirable, in some cases, to have a piece of advice available interactively from WHM, but not send automated notifications about it. If so, you can direct this behavior in the advice creation:
+
+```perl
+ $security_advisor_obj->add_advice(
+     {
+	'key'          => 'EntropyChat_is_running',
+	'block_notify' => 1,    # <--- any defined, nonzero value will do!
+	'type'         => $Cpanel::Security::Advisor::ADVISE_BAD,
+	'text'         => ['Entropy Chat is running.'],
+	'suggestion'   => [
+	    'Turn off Entropy Chat in the “[output,url,_1,Service Manager,_2,_3]” page.',
+	    $self->base_path('scripts/srvmng'),
+	    'target',
+	    '_blank'
+	],
+     }
+ );
+```
+
+It won't change the behavior when Security Advisor is used in WHM, but the automated notification script will skip this advice.
